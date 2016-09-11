@@ -1,13 +1,13 @@
 name: HackersGoHome
 author: L3OShow
-version: 2.6
+version: 2.7
 description: Prevent hackers from grief your server with passwords and restrictions!
 main: me.l3oshow.hgh.HGH
 
 commands:
     logme: 
         usage: /logme <password>
-        description: Permette di loggarti
+        description: Log yourself
     antigrief:
         usage: /antigrief <password>
-        description: Ti da accesso ai comandi pericolosi
+        description: Log yourself to access dangerous commands

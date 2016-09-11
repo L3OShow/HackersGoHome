@@ -1,0 +1,7 @@
+prefix: '&c&lHackersGoHome &8>'
+loggedin: '&7Logged in!'
+loggedinag: '&7Now you have access to dangerous commands!'
+insertpsw: '&7Insert the password!'
+insertpswag: '&7Insert the AntiGrief password!'
+wrongpsw: '&7Wrong password!'
+ip-rejoin: '&e$name &7rejoin with the IP: &e$ip&7. You don''t need to enter the password!'

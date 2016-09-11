@@ -22,15 +22,19 @@ public class HGH extends org.bukkit.plugin.java.JavaPlugin {
 	String prefix;
 	String loggedin;
 	String loggedinag;
+	String alreadylogged;
 
+	String ver = this.getDescription().getVersion();
+	
 	@Override
 	public void onEnable() {
 		settings.setup(this);
 		prefix = ChatColor.translateAlternateColorCodes('&', settings.getMessages().getString("prefix"));
 		loggedin = ChatColor.translateAlternateColorCodes('&', settings.getMessages().getString("loggedin"));
 		loggedinag = ChatColor.translateAlternateColorCodes('&', settings.getMessages().getString("loggedinag"));
+		alreadylogged = ChatColor.translateAlternateColorCodes('&', settings.getMessages().getString("already-logged"));
 		Bukkit.getServer().getPluginManager().registerEvents(new PListener(this), this);
-		Bukkit.getServer().getLogger().info("[HGH] HackersGoHome enabled!");
+		Bukkit.getServer().getLogger().info("[HGH] HackersGoHome v" + ver + " enabled!");
 		config = getConfig();
 		config.addDefault("HGH.password", "default123");
 		config.addDefault("HGH.passwordag", "defaultag");
@@ -43,39 +47,63 @@ public class HGH extends org.bukkit.plugin.java.JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		Bukkit.getServer().getLogger().info("[HGH] HackersGoHome disabled!");
+		Bukkit.getServer().getLogger().info("[HGH] HackersGoHome v" + ver + " disabled!");
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if ((cmd.getName().equalsIgnoreCase("logme"))
-			 && sender.isOp()
-			 || sender.hasPermission("*")
-			 || sender.hasPermission(config.getString("HGH.permission"))
-			 && args.length == 1
-			 && notlogged.contains(sender.getName())) {
+		if ((cmd.getName().equalsIgnoreCase("logme"))) {
 			
-			Player p = (Player) sender;
-			
-			if (args[0].equals(config.getString("HGH.password"))) {
-				notlogged.remove(sender.getName());
-				sender.sendMessage(prefix + " " + loggedin);
-				map.put(sender.getName(), p.getAddress().getAddress().getHostAddress());
+			if(!(sender instanceof Player)) {
+				sender.sendMessage(prefix + "Non puoi usare questo comando da console.");
+			}
+			else {
+				Player p = (Player) sender;
+				if(p.isOp()
+				   || p.hasPermission("*")
+				   || p.hasPermission(config.getString("HGH.permission"))) {
+					
+					if(args.length == 1) {
+						if(notlogged.contains(p.getName()) && args[0].equals(config.getString("HGH.password"))) {
+							p.sendMessage(prefix + " " + loggedin);
+							map.put(p.getName(), p.getAddress().getAddress().getHostAddress());
+							notlogged.remove(p.getName());
+							notloggedag.add(p.getName());
+							return true;
+						}
+					}
+					
+					if(!notlogged.contains(p.getName())) {
+						p.sendMessage(prefix + " " + alreadylogged);
+						return true;
+					}
+				}
 			}
 		}
-		if ((cmd.getName().equalsIgnoreCase("antigrief"))
-			 && sender.isOp()
-			 || sender.hasPermission("*")
-			 || sender.hasPermission(config.getString("HGH.permissionag"))
-			 && args.length == 1
-			 && notloggedag.contains(sender.getName())) {
+		if ((cmd.getName().equalsIgnoreCase("antigrief"))) {
 			
-			Player p = (Player) sender;
-			
-			if (args[0].equals(config.getString("HGH.passwordag"))) {
-				notloggedag.remove(sender.getName());
-				sender.sendMessage(prefix + " " + loggedinag);
-				map.put(sender.getName(), p.getAddress().getAddress().getHostAddress());
+			if(!(sender instanceof Player)) {
+				sender.sendMessage(prefix + "Non puoi usare questo comando da console.");
+			}
+			else {
+				Player p = (Player) sender;
+				if(p.isOp()
+				   || p.hasPermission("*")
+				   || p.hasPermission(config.getString("HGH.permissionag"))) {
+					if(args.length == 1) {
+						if(notloggedag.contains(p.getName()) && args[0].equals(config.getString("HGH.passwordag"))) {
+							p.sendMessage(prefix + " " + loggedinag);
+							map.put(p.getName(), p.getAddress().getAddress().getHostAddress());
+							notloggedag.remove(p.getName());
+							return true;
+						}
+					}
+					
+					if(!notloggedag.contains(p.getName())) {
+						p.sendMessage(prefix + " " + alreadylogged);
+						return true;
+					}
+				}
 			}
 		}
 		return true;

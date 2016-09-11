@@ -66,31 +66,25 @@ public class PListener implements org.bukkit.event.Listener {
 			p.sendMessage(prefix + " " + insertpsw);
 			e.setCancelled(true);
 		}
-		else {
-			plugin.notloggedag.add(p.getName());
-			plugin.notlogged.remove(p.getName());
-		}
-
-		if (plugin.notloggedag.contains(p.getName()) && (message.startsWith("//"))
-				|| message.startsWith("/sp")
-				|| message.startsWith("/br")
-				|| message.startsWith("/tool")
-				|| message.startsWith("/pt")
-				|| message.startsWith("/powertool")
-				|| message.startsWith("/essentials:pt")
-				|| message.startsWith("/essentials:powertool")
-				|| message.startsWith("/reload")
-				|| message.startsWith("/plugman")
-				|| message.startsWith("/bukkit:")
-				|| message.startsWith("/worldedit:")) {
 			
-				if(!message.equalsIgnoreCase("/antigrief " + plugin.config.getString("HGH.passwordag"))) {
+		String[] args = message.split(" ");
+		
+		if(!plugin.notlogged.contains(p.getName()) && plugin.notloggedag.contains(p.getName())) {
+			for(int i = 0; i < args.length; i++) {
+				if(plugin.config.getStringList("blocked-commands").contains(args[i])) {
 					p.sendMessage(prefix + " " + insertpswag);
 					e.setCancelled(true);
 				}
-				else {
-					plugin.notloggedag.remove(p.getName());
+			}
+		}		
+		
+		if(message.toLowerCase().startsWith("/antigrief")) {
+			if(args.length == 2) {
+				if(!args[1].equals(plugin.config.getString("HGH.passwordag"))) {
+					p.sendMessage(prefix + " " + wrongpsw);
+					e.setCancelled(true);
 				}
+			}
 		}
 	}
 

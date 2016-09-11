@@ -4,3 +4,23 @@ HGH:
   permission: 'null'
   permissionag: 'null'
   StoreAndUseIP: true
+  
+blocked-commands: 
+- //sphere
+- /sp
+- //
+- /br
+- /tool
+- /brush
+- /pt
+- /powertool
+- /essentials:powertool
+- /essentials:pt
+- /reload
+- /stop
+- /plugman
+- /bukkit:reload
+- /bukkit:stop
+- /minecraft:stop
+- /pex
+- /permissionsex:pex
